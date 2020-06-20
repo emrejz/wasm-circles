@@ -1,0 +1,4 @@
+char *str()
+{
+    return "emreee";
+}
