@@ -1,7 +1,10 @@
 Module.onRuntimeInitialized = () => {
   const canvas = document.querySelector("canvas");
   const context = canvas.getContext("2d");
-  const circle = [];
+  let canvasWei = canvas.width;
+  let canvasHei = canvas.height;
+  _generateCircles();
+  let circles = [];
   const circleGenerator = (i) => {
     context.beginPath();
     context.arc(
@@ -17,11 +20,19 @@ Module.onRuntimeInitialized = () => {
     })`;
     context.fill();
   };
-  const render = (num) => {
-    circles = new Int32Array(Module.HEAP32.buffer, _getCircle(num), 6 * num);
+  const render = () => {
+    context.clearRect(0, 0, canvasWei, canvasHei);
+    circles = new Int32Array(
+      Module.HEAP32.buffer,
+      _getCircles(canvasWei, canvasHei),
+      6 * 500
+    );
     for (let i = 0; i < circles.length; i += 6) {
       circleGenerator(i);
     }
+    window.requestAnimationFrame(() => {
+      render();
+    });
   };
-  render(10);
+  render();
 };
